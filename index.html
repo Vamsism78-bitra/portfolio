@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sai Vamsi Bitra — Data Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --fg:#e8e6e1;
+  --accent:#4fd1c5;
+  --accent2:#f6ad55;
+  --muted:#6b7280;
+  --card:rgba(255,255,255,0.03);
+  --border:rgba(255,255,255,0.06);
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.7;overflow-x:hidden}
+
+/* Noise overlay */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat:repeat;opacity:.4}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+a{color:var(--accent);text-decoration:none;transition:color .2s}
+a:hover{color:var(--accent2)}
+
+/* ===== NAV ===== */
+nav{position:fixed;top:0;width:100%;z-index:100;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;
+  background:rgba(10,10,15,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+nav .logo{font-family:var(--serif);font-size:1.5rem;font-style:italic;color:var(--accent)}
+nav ul{list-style:none;display:flex;gap:2rem}
+nav ul a{font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+nav ul a:hover{color:var(--fg)}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 3rem 4rem;position:relative}
+.hero::after{content:'';position:absolute;top:10%;right:0;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(79,209,197,.08),transparent 70%);pointer-events:none}
+.hero-label{font-family:var(--mono);font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:.6rem}
+.hero-label::before{content:'';width:2rem;height:1px;background:var(--accent)}
+.hero h1{font-family:var(--serif);font-size:clamp(3rem,7vw,6rem);font-weight:400;line-height:1.05;margin-bottom:1.5rem;max-width:900px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:600px;margin-bottom:2.5rem;font-weight:300}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn{padding:.8rem 2rem;border-radius:2px;font-family:var(--sans);font-size:.85rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;
+  border:1px solid var(--accent);color:var(--accent);transition:all .3s;cursor:pointer;background:transparent}
+.btn:hover{background:var(--accent);color:var(--bg)}
+.btn.filled{background:var(--accent);color:var(--bg)}
+.btn.filled:hover{background:transparent;color:var(--accent)}
+
+/* ===== SECTION COMMON ===== */
+section{padding:6rem 3rem}
+.section-label{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;
+  display:flex;align-items:center;gap:.6rem}
+.section-label::before{content:'';width:1.5rem;height:1px;background:var(--accent)}
+.section-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:400;margin-bottom:3rem}
+
+/* ===== ABOUT ===== */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.about-text{font-size:1rem;color:var(--muted);font-weight:300}
+.about-text p+p{margin-top:1.2rem}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.stat{padding:1.5rem;border:1px solid var(--border);border-radius:4px;background:var(--card)}
+.stat-number{font-family:var(--serif);font-size:2.8rem;color:var(--accent);line-height:1}
+.stat-label{font-size:.8rem;color:var(--muted);margin-top:.5rem;text-transform:uppercase;letter-spacing:.08em}
+
+/* ===== SKILLS ===== */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.skill-card{padding:2rem;border:1px solid var(--border);border-radius:4px;background:var(--card);transition:border-color .3s,transform .3s}
+.skill-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.skill-card h3{font-family:var(--serif);font-size:1.3rem;margin-bottom:1rem}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.tag{padding:.3rem .7rem;font-size:.7rem;font-family:var(--mono);border:1px solid var(--border);border-radius:2px;color:var(--muted);letter-spacing:.04em}
+
+/* ===== EXPERIENCE ===== */
+.timeline{position:relative;padding-left:3rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--border)}
+.timeline-item{position:relative;padding-bottom:3rem}
+.timeline-item::before{content:'';position:absolute;left:-3rem;top:.5rem;width:9px;height:9px;border-radius:50%;border:2px solid var(--accent);background:var(--bg)}
+.timeline-item h3{font-family:var(--serif);font-size:1.4rem;margin-bottom:.3rem}
+.timeline-item .meta{font-family:var(--mono);font-size:.75rem;color:var(--accent);margin-bottom:1rem;letter-spacing:.04em}
+.timeline-item ul{list-style:none;padding:0}
+.timeline-item li{position:relative;padding-left:1.2rem;font-size:.9rem;color:var(--muted);margin-bottom:.5rem;font-weight:300}
+.timeline-item li::before{content:'';position:absolute;left:0;top:.65rem;width:5px;height:1px;background:var(--accent)}
+
+/* ===== EDUCATION ===== */
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.edu-card{padding:2rem;border:1px solid var(--border);border-radius:4px;background:var(--card)}
+.edu-card h3{font-family:var(--serif);font-size:1.3rem;margin-bottom:.3rem}
+.edu-card .meta{font-family:var(--mono);font-size:.75rem;color:var(--accent);margin-bottom:.5rem}
+.edu-card p{font-size:.9rem;color:var(--muted);font-weight:300}
+
+/* ===== CERTIFICATIONS ===== */
+.cert-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.cert{padding:1.2rem 1.5rem;border:1px solid var(--border);border-radius:4px;background:var(--card);display:flex;align-items:center;gap:1rem;
+  transition:border-color .3s}
+.cert:hover{border-color:var(--accent)}
+.cert-icon{width:36px;height:36px;border-radius:50%;background:rgba(79,209,197,.1);display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.75rem;color:var(--accent);flex-shrink:0}
+.cert span{font-size:.9rem;font-weight:400}
+
+/* ===== CONTACT ===== */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:1.5rem}
+.contact-item{display:flex;align-items:center;gap:1rem}
+.contact-item .icon{width:40px;height:40px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:var(--accent)}
+.contact-item span{font-size:.95rem;color:var(--muted)}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+.contact-form input,.contact-form textarea{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:1rem;
+  font-family:var(--sans);font-size:.9rem;color:var(--fg);outline:none;transition:border-color .3s;resize:vertical}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--accent)}
+.contact-form textarea{min-height:120px}
+
+/* ===== FOOTER ===== */
+footer{padding:3rem;text-align:center;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted)}
+
+/* ===== ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  nav ul{gap:1rem}
+  .hero,.section-common,section{padding:4rem 1.5rem}
+  .about-grid,.edu-grid,.contact-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .timeline{padding-left:2rem}
+  .timeline-item::before{left:-2rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">V.B</div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">Data Engineer</div>
+  <h1>Building <em>scalable</em> data pipelines that power business decisions</h1>
+  <p>3+ years engineering enterprise data solutions on Azure & AWS. DP-203 certified. Currently completing MSc in Data Science at Maynooth University, Ireland.</p>
+  <div class="hero-btns">
+    <a href="#contact" class="btn filled">Get in Touch</a>
+    <a href="#experience" class="btn">View Experience</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 / About</div>
+  <div class="section-title">Turning raw data into<br>actionable insights</div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Data Engineer with 3+ years of experience at LTIMindtree designing and delivering scalable end-to-end data engineering solutions on Azure and AWS for enterprise clients.</p>
+      <p>Hands-on expertise in building high-performance data pipelines, ETL/ELT workflows, cloud data platforms, and analytics solutions. Built and optimized pipelines processing 500 GB to 1 TB of data daily from SAP systems, REST APIs, and cloud platforms.</p>
+      <p>Open to opportunities in Data Engineering, Azure, Databricks, Snowflake, and Cloud Analytics roles across Ireland and Europe.</p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><div class="stat-number">3+</div><div class="stat-label">Years Experience</div></div>
+      <div class="stat"><div class="stat-number">1TB</div><div class="stat-label">Daily Data Processed</div></div>
+      <div class="stat"><div class="stat-number">40%</div><div class="stat-label">Efficiency Improvement</div></div>
+      <div class="stat"><div class="stat-number">200+</div><div class="stat-label">API Integrations</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">02 / Skills</div>
+  <div class="section-title">Technical toolkit</div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <h3>Cloud Platforms</h3>
+      <div class="skill-tags">
+        <span class="tag">Azure Databricks</span>
+        <span class="tag">Azure Data Factory</span>
+        <span class="tag">Azure Synapse</span>
+        <span class="tag">ADLS</span>
+        <span class="tag">AWS S3</span>
+        <span class="tag">AWS IAM</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <h3>Data Engineering</h3>
+      <div class="skill-tags">
+        <span class="tag">PySpark</span>
+        <span class="tag">Apache Spark</span>
+        <span class="tag">Delta Lake</span>
+        <span class="tag">Snowflake</span>
+        <span class="tag">Apache Airflow</span>
+        <span class="tag">Kafka</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <h3>Languages & Databases</h3>
+      <div class="skill-tags">
+        <span class="tag">Python</span>
+        <span class="tag">SQL</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">SQL Server</span>
+        <span class="tag">Hadoop</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <h3>DevOps & Tools</h3>
+      <div class="skill-tags">
+        <span class="tag">Git / GitHub</span>
+        <span class="tag">Azure DevOps</span>
+        <span class="tag">CI/CD</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Power BI</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <h3>Core Strengths</h3>
+      <div class="skill-tags">
+        <span class="tag">ETL / ELT</span>
+        <span class="tag">Medallion Architecture</span>
+        <span class="tag">Data Warehousing</span>
+        <span class="tag">Data Governance</span>
+        <span class="tag">Performance Optimization</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <h3>Methodologies</h3>
+      <div class="skill-tags">
+        <span class="tag">Agile / Scrum</span>
+        <span class="tag">Data Quality</span>
+        <span class="tag">Batch Processing</span>
+        <span class="tag">Incremental Loading</span>
+        <span class="tag">Data Modelling</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">03 / Experience</div>
+  <div class="section-title">Professional journey</div>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <h3>Data Engineer</h3>
+      <div class="meta">LTIMindtree &mdash; Hyderabad &bull; Sep 2023 &ndash; Aug 2024</div>
+      <ul>
+        <li>Designed and deployed scalable data pipelines using Azure Data Factory, improving processing efficiency by 40%</li>
+        <li>Built continuous ingestion pipelines for multi-source data feeds, including 70% enterprise data from SAP and 200+ third-party REST APIs into Azure Data Lake</li>
+        <li>Developed scalable batch and incremental ETL/ELT pipelines using PySpark and Delta Lake, improving performance by 30%</li>
+        <li>Automated CI/CD pipelines to streamline deployments and improve release efficiency across environments</li>
+        <li>Implemented data quality validation using Key Business Indicators (KBIs), ensuring accuracy in downstream reporting</li>
+        <li>Worked with cross-functional stakeholders to deliver reliable data solutions aligned with business requirements</li>
+      </ul>
+    </div>
+    <div class="timeline-item reveal">
+      <h3>Junior Data Engineer</h3>
+      <div class="meta">LTIMindtree &mdash; Hyderabad &bull; Jul 2021 &ndash; Aug 2023</div>
+      <ul>
+        <li>Analyzed, designed and built data solutions for enterprise-level businesses to support data visualization from various sources</li>
+        <li>Developed SQL scripts for query automation, increasing the volume and accuracy of queries by 64%</li>
+        <li>Collaborated with stakeholders to design data models, improving reporting accuracy and data quality by 20%</li>
+        <li>Streamlined data collection processes, reducing errors by 15% and increasing data quality assurance</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label">04 / Education</div>
+  <div class="section-title">Academic background</div>
+  <div class="edu-grid reveal">
+    <div class="edu-card">
+      <h3>MSc Data Science & Analytics</h3>
+      <div class="meta">Maynooth University, Ireland &bull; 2024 &ndash; 2025</div>
+      <p>Machine learning workflows, analytics, and data-driven decision making.</p>
+    </div>
+    <div class="edu-card">
+      <h3>B.E. Electrical & Electronics Engineering</h3>
+      <div class="meta">Veltech University &bull; 2017 &ndash; 2021</div>
+      <p>Electrical, Electronic and Communications Engineering Technology.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-label">05 / Certifications</div>
+  <div class="section-title">Credentials</div>
+  <div class="cert-list reveal">
+    <div class="cert"><div class="cert-icon">AZ</div><span>Microsoft Certified: Azure Data Engineer Associate (DP-203)</span></div>
+    <div class="cert"><div class="cert-icon">AZ</div><span>Microsoft Certified: Azure Fundamentals</span></div>
+    <div class="cert"><div class="cert-icon">PY</div><span>Programming for Everybody (Getting Started with Python)</span></div>
+    <div class="cert"><div class="cert-icon">ML</div><span>Python for Machine Learning</span></div>
+    <div class="cert"><div class="cert-icon">DS</div><span>Data Science Ethics</span></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">06 / Contact</div>
+  <div class="section-title">Let's connect</div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="contact-item">
+        <div class="icon">@</div>
+        <span><a href="mailto:saivamsibitra@gmail.com">saivamsibitra@gmail.com</a></span>
+      </div>
+      <div class="contact-item">
+        <div class="icon">Ph</div>
+        <span>+353 89 419 7385</span>
+      </div>
+      <div class="contact-item">
+        <div class="icon">In</div>
+        <span><a href="https://www.linkedin.com/in/vamsi-bitra" target="_blank">linkedin.com/in/vamsi-bitra</a></span>
+      </div>
+      <div class="contact-item">
+        <div class="icon">Loc</div>
+        <span>Maynooth, County Kildare, Ireland</span>
+      </div>
+    </div>
+    <form class="contact-form reveal" onsubmit="event.preventDefault();alert('Thanks for reaching out! I will get back to you soon.')">
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit" class="btn filled" style="border:none;cursor:pointer">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Sai Vamsi Bitra. Built with purpose.</p>
+</footer>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
